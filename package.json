@@ -1,0 +1,27 @@
+{
+  "name": "automated-posts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErichasaTan/automated-posts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ErichasaTan/automated-posts/issues"
+  },
+  "homepage": "https://github.com/ErichasaTan/automated-posts#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "fast-csv": "^5.0.1",
+    "node-cron": "^3.0.3"
+  }
+}
