@@ -29,7 +29,7 @@ async function getSpotifyAccessToken() {
 // Helper function to get the date of yesterday
 function getYesterdayDate() {
   const today = new Date();
-  today.setDate(today.getDate() - 1); // Change this if you want it to get more than just yesterday
+  today.setDate(today.getDate() - 25); // Change this if you want it to get more than just yesterday
   return today.toISOString().split('T')[0]; // Format YYYY-MM-DD
 }
 
@@ -144,4 +144,68 @@ async function getNewReleases(artistIds) {
   return newReleases;
 }
 
-module.exports = { getSpotifyAccessToken, getNewReleases };
+const { S3Client, ListObjectsCommand, GetObjectCommand, GetObjectCommandOutput, GetObjectCommandInput } = require('@aws-sdk/client-s3');
+const { randomInt } = require('crypto');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+
+// Set up AWS S3 config
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+  region: process.env.AWS_REGION
+});
+
+const BUCKET_NAME = 'eric-music-artist-images';
+const BASE_FOLDER = 'artist_images/artist_name/';
+
+// Helper function to pick a random image
+function getRandomImage(images) {
+  const randomIndex = randomInt(images.length);
+  return images[randomIndex];
+}
+
+// Function to fetch a random artist image from S3 based on artist ID
+async function getArtistImageFromS3(artistId) {
+  const artistFolder = `${BASE_FOLDER}${artistId}/`;
+
+  try {
+    // List objects in the artist's folder
+    const listObjectsCommand = new ListObjectsCommand({
+      Bucket: BUCKET_NAME,
+      Prefix: artistFolder
+    });
+
+    const response = await s3.send(listObjectsCommand);
+
+    if (!response.Contents || response.Contents.length === 0) {
+      console.log(`No images found for artist ID: ${artistId}`);
+      return null;
+    }
+
+    // Randomly pick one image from the folder
+    const randomImage = getRandomImage(response.Contents);
+    const imageKey = randomImage.Key;
+
+    // Log the name of the picked image
+    console.log(`Random image selected: ${imageKey}`);
+
+    // Generate a pre-signed URL for the randomly selected image
+    const getObjectCommand = new GetObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: imageKey
+    });
+
+    const url = await getSignedUrl(s3, getObjectCommand, { expiresIn: 3600 }); // URL valid for 1 hour
+
+    console.log(`Pre-signed URL successfully generated for artist ID: ${artistId}`);
+    return url; // Return the pre-signed URL
+  } catch (error) {
+    console.error(`Error fetching image for artist ID: ${artistId}:`, error);
+    return null;
+  }
+}
+
+module.exports = { getSpotifyAccessToken, getNewReleases, getArtistImageFromS3 };
+
