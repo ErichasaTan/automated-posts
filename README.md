@@ -35,3 +35,11 @@ This project automates the process of posting updates to Instagram whenever an a
 - `AWS_SECRET_ACCESS_KEY=`
 - `OPENAI_API_KEY=`
 - `FACEBOOK_ACCESS_TOKEN=`
+
+## Project Structure
+/automated-posts
+|-- /images           # Folder for storing images locally
+|-- /src              # Source files for the application
+|-- spotify.js        # Main script to handle Spotify data fetching
+|-- generateCSV.js    # CSV generation logic
+|-- .env              # Environment variables
