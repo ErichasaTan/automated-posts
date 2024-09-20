@@ -29,9 +29,9 @@ This project automates the process of posting updates to Instagram whenever an a
 ## Installation
 
 - Required .env
-SPOTIFY_CLIENT_ID=
-SPOTIFY_CLIENT_SECRET=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-OPENAI_API_KEY=
-FACEBOOK_ACCESS_TOKEN=
+- `SPOTIFY_CLIENT_ID=`
+- `SPOTIFY_CLIENT_SECRET=`
+- `AWS_ACCESS_KEY_ID=`
+- `AWS_SECRET_ACCESS_KEY=`
+- `OPENAI_API_KEY=`
+- `FACEBOOK_ACCESS_TOKEN=`
