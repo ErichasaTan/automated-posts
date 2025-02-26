@@ -5,7 +5,7 @@ This project automates the process of posting updates to Instagram whenever an a
 ## Features
 
 - Fetches new releases from Spotify for a list of artists.
-- Retrieves artist images from AWS S3.
+- Retrieves artist images from AWS S3 Bucket.
 - Generates a CSV file with release information including:
   - Artist name
   - Song title
